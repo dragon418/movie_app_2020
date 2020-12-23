@@ -1,35 +1,29 @@
 import React from 'react'
+import axios from 'axios'
 
-function Food({name, picture}) {
-  return (
-    <div>
-      <h2>I love {name}</h2>
-      <img src={picture} alt={name}/>
-    </div>
-  );
-}
-
-const foodILike = [
-  {
-    id:1,
-    name: 'Kimchi',
-    image: 'https://cdn.imweb.me/thumbnail/20200415/6b6e035658bac.png'
-  },
-  {
-    id:2,
-    name: "Bibimbap",
-    image:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Korean_cuisine-Jeonju_bibimbap-01.jpg/440px-Korean_cuisine-Jeonju_bibimbap-01.jpg'
+class App extends React.Component {
+  state = {
+    isLoading: true,
+    movie: []
   }
-];
 
-function App() {
-  return (
-      <div>
-        { foodILike.map(dish => (
-          <Food key={dish.id} name={dish.name} picture={dish.image}/>
-        ))}
-      </div>
-  );
+  getMovies = async () => {
+    const {
+      data : {
+        data: {movies},
+      }
+    }  = await axios.get('https://yts.mx/api/v2/list_movies.json');
+    console.log(movies);
+  }
+
+  componentDidMount() {
+    this.getMovies();
+  }
+
+  render() {
+    const  { isLoading } = this.state;
+    return <div>{isLoading? 'Loading...':'We are ready'}</div>
+  }
 }
 
 export default App;
